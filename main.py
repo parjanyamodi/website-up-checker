@@ -1,28 +1,20 @@
 import mysql.connector
-import requests
-import threading
+import urllib3
+import time
 import datetime
 import random
 import string
-global domains
-global column_name
+
 mydb = mysql.connector.connect(
     host="localhost", user="root", password="toor", database="website_db")
 mycursor = mydb.cursor()
 
-def createColumnname():
-    global column_name
-    column_name = [None] * 100
-    sample_string = 'pqrstuvwxy'
-    for i in range(100):
-        column_name[i] = ''.join((random.choice(sample_string)) for x in range(4))
+global domians
 
 def getDomains():
     global domains
     mycursor.execute("SELECT domain_name FROM websites_list")
     domains = mycursor.fetchall()
-    print(domains)
-    print(domains[0])
     urls = [None] * len(domains)
     for i in range(len(domains)):
         tmp = str(domains[i])
@@ -33,31 +25,40 @@ def getDomains():
     return urls
 
 
-def getStatus(urls, k):
+def getStatus(k):
+    urls = getDomains()
     res_code = [None] * len(urls)
     for i in range(len(urls)):
         print(i)
         print(urls[i])
-        response = requests.get(urls[i])
-        res_code[i] = str(response.status_code)
+        http = urllib3.PoolManager(timeout=8.0)
+        try:
+            response = http.request('GET', urls[i], retries=False)
+        except urllib3.exceptions.ProtocolError:
+            response.status = 900
+        except urllib3.exceptions.ConnectTimeoutError:
+            res.status = 800
+        res_code[i] = str(response.status)
+    postStatus(res_code, k, urls)
 
-    postStatus(res_code, k)
 
-
-def postStatus(res_code, k):
+def postStatus(res_code, k, urls):
     global domains
-    sql = "ALTER table websites_list ADD COLUMN {} VARCHAR(255)".format(column_name[k])
-    mycursor.execute(sql)
-    for i in range(len(domains)):
-        sql = "UPDATE websites_list SET {} = {};".format(column_name[k], res_code[i])
-        print(res_code[i])
+    column_name = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM',
+                   'AN', 'AO', 'AP', 'AQ', 'AR', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ', 'BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BK', 'BL', 'BM', 'BN', 'BO', 'BP', 'BQ', 'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX']
+    for i in range(len(res_code)):
+        sql = "UPDATE websites_list SET {} = {} WHERE domain_name = {};".format(column_name[k], res_code[i], domains[i])
         mycursor.execute(sql)
+        print(column_name[k])
     myresult = mycursor.fetchall()
     mydb.commit()
 
+def main(k):
+    getStatus(k)
+    time.sleep(10)
 
 if __name__ == "__main__":
-    createColumnname()
-    for i in range(100):
-        urls = getDomains()
-        getStatus(urls, i)
+    k = 0
+    while True:
+        main(k)
+        k=k+1
