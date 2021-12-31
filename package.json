@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start": "nodemon index.js .js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "mongodb": "^4.2.2",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.15",
+    "puppeteer": "^13.0.1",
+    "request": "^2.88.2"
+  }
+}
