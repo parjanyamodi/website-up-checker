@@ -154,6 +154,25 @@ function login(eMail, passWord, res) {
   );
 }
 
+app.get("/addurl/:userId/:url", (req, res) => {
+  var userId = req.params.userId;
+  var url = req.params.url;
+  addUrl(userId, url, res);
+});
+
+function addUrl(userId, url, res) {
+  var urlId = makeId(50);
+  sql.query(
+    `INSERT INTO url_table values('${userId}','${url}','${urlId}')`,
+    function (erro, resu) {
+      if (erro) {
+        res.send({ status: erro });
+      } else {
+        res.send({ status: "success" });
+      }
+    }
+  );
+}
 function encryptWithAES(text) {
   const passphrase = "123";
   return CryptoJS.AES.encrypt(text, passphrase).toString();

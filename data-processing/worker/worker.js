@@ -11,13 +11,13 @@ async function worker() {
     } else {
       for (let i in res) {
         var obj = res[i];
-        const browser = await puppeteer.launch({ headless: false });
+        const browser = await puppeteer.launch();
         const time = new Date();
         try {
           const page = await browser.newPage();
           await page.emulate(iPad);
           await page.setDefaultTimeout(20000);
-          await page.goto(`${obj.url}`);
+          await page.goto(`https://${obj.url}`);
 
           const metrics = await page.metrics();
 
