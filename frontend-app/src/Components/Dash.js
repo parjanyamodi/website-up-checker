@@ -1,38 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import axios from "axios";
 import Cookies from "universal-cookie";
-const cookies = new Cookies();
+import { GoogleLogout } from "react-google-login";
 
-// get token generated on login
-const token = cookies.get("TOKEN");
+const clientId =
+  "12442857673-tpt89aun3q39us85u5g8rlr5gj451q5g.apps.googleusercontent.com";
+
+const cookies = new Cookies();
 
 const Dash = (props) => {
   const [message, setMessage] = useState("");
-
-  // useEffect automatically executes once the page is fully loaded
-  useEffect(() => {
-    // set configurations for the API call here
-    const configuration = {
-      method: "get",
-      url: `http://localhost:4500/urllist/${token}`,
-    };
-
-    // make the API call
-    axios(configuration)
-      .then((result) => {
-        // assign the message in our result to the message we initialized above
-        setMessage(result.data.message);
-      })
-      .catch((error) => {
-        error = new Error();
-      });
-  }, []);
-
+  // get token generated on login
+  const token = cookies.get("Profile-Token");
+  const status = cookies.get("Status");
+  console.log(token);
+  console.log(status);
   // logout
   const logout = () => {
     // destroy the cookie
-    cookies.remove("TOKEN", { path: "/" });
+    cookies.remove("Profile-Token", { path: "/" });
+    cookies.remove("Status", { path: "/" });
     // redirect user to the landing page
     window.location.href = "/";
   };
@@ -45,9 +32,11 @@ const Dash = (props) => {
       <h3 className="text-danger">{message}</h3>
 
       {/* logout */}
-      <Button type="submit" variant="danger" onClick={() => logout()}>
-        Logout
-      </Button>
+      <GoogleLogout
+        clientId={clientId}
+        buttonText="Logout"
+        onLogoutSuccess={logout}
+      ></GoogleLogout>
     </div>
   );
 };

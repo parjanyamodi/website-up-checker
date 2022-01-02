@@ -127,57 +127,42 @@ function addUrl(userId, url, res) {
 }
 //End of Add URL
 
-//Start of User Registration
-app.get("/register/:email/:password", (req, res) => {
-  var eMail = req.params.email;
-  var passWord = encryptWithAES(req.params.password);
-  register(eMail, passWord, res);
+//Start of User Login
+app.get("/login/:googleId/:email/:name", (req, res) => {
+  var googleId = req.params.googleId;
+  var email = req.params.email;
+  var name = req.params.name;
+  login(googleId, email, name, res);
 });
-function register(eMail, passWord, res) {
+function login(googleId, email, name, res) {
+  console.log(googleId);
   sql.query(
-    `SELECT email from login_table WHERE email = '${eMail}'`,
+    `SELECT * FROM login_table WHERE user_id = '${googleId}'`,
     function (err, result) {
       if (err) {
         res.send({ status: err });
       } else {
         if (result.length === 0) {
-          var user_id = makeId(30);
           sql.query(
-            `INSERT INTO login_table values('${user_id}','${eMail}','${passWord}')`,
-            function (erro, resu) {
-              if (erro) {
-                res.send({ status: erro });
+            `INSERT INTO login_table values('${googleId}','${name}','${email}');`,
+            function (err, result) {
+              if (err) {
+                res.send({ status: err });
               } else {
-                res.send({ status: "success" });
+                res.send({
+                  message: "success",
+                  status: "new",
+                  user_id: googleId,
+                });
               }
             }
           );
         } else {
-          res.send({ status: "decline" });
-        }
-      }
-    }
-  );
-}
-//End of User Registration
-
-//Start of User Login
-app.get("/login/:email/:password", (req, res) => {
-  var eMail = req.params.email;
-  var passWord = req.params.password;
-  login(eMail, passWord, res);
-});
-function login(eMail, passWord, res) {
-  sql.query(
-    `SELECT * FROM login_table WHERE email = '${eMail}'`,
-    function (err, result) {
-      if (err) {
-        res.send({ status: err });
-      } else {
-        if (passWord == decryptWithAES(result[0].pass)) {
-          res.json({ status: "success", user_id: result[0].user_id });
-        } else {
-          res.json({ status: "decline" });
+          res.send({
+            message: "success",
+            status: "existing",
+            user_id: googleId,
+          });
         }
       }
     }
