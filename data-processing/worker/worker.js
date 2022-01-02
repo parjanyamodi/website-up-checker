@@ -25,7 +25,7 @@ async function worker() {
           await page.screenshot({
             path: `./screenshots/${obj.url_id}_${metrics.Timestamp}.png`,
           });
-          const screenshotname = `${obj.url_id}_${metrics.Timestamp}`;
+          const screenshotname = `${obj.url_id}_${metrics.Timestamp}.png`;
 
           sql.query(
             `INSERT INTO stats_table (user_id, url_id, time_stamp, status_code, layout_duration, recalcstyle_duration, script_duration, task_duration, screenshot) values('${obj.user_id}','${obj.url_id}','${time}','200','${metrics.LayoutDuration}','${metrics.RecalcStyleDuration}','${metrics.ScriptDuration}','${metrics.TaskDuration}','${screenshotname}')`,
@@ -40,7 +40,7 @@ async function worker() {
         } catch (error) {
           const screenshotname = "error";
           sql.query(
-            `INSERT INTO stats_table (user_id, url_id, time_stamp, status_code, layout_duration, recalcstyle_duration, script_duration, task_duration, screenshot) values('${obj.user_id}','${obj.url_id}','${time}','','','','','','${screenshotname}')`,
+            `INSERT INTO stats_table (user_id, url_id, time_stamp, status_code, layout_duration, recalcstyle_duration, script_duration, task_duration, screenshot) values('${obj.user_id}','${obj.url_id}','${time}','${error}','','','','','${screenshotname}')`,
             function (err, res) {
               if (err) {
                 console.log(err);
