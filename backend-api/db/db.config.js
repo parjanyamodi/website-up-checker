@@ -1,6 +1,6 @@
 module.exports = {
   host: "localhost",
   user: "root",
-  password: "toor@2022",
+  password: "WinMac@2021mysql",
   database: "website-up-checker",
 };

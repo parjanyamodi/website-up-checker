@@ -5,7 +5,7 @@ const sql = require("./db/db");
 const fs = require("fs");
 const CryptoJS = require("crypto-js");
 
-const Port = 4500;
+const Port = 3403;
 const app = express();
 
 app.use(bodyParser.json());
@@ -203,4 +203,4 @@ function decryptWithAES(ciphertext) {
 }
 //End of AES Decryption
 
-app.listen(Port, console.log("Listening to post 4500"));
+app.listen(Port, console.log("Script Started"));
