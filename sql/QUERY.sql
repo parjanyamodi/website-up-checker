@@ -5,6 +5,8 @@ SELECT * FROM login_table;
 drop table login_table;
 
 SELECT email from login_table WHERE email = 'parjanyamodi@gmail.cm';
+
+
 drop table stats_table;
 CREATE TABLE stats_table (user_id varchar(30), url_id varchar(255), time_stamp varchar(255), status_code varchar(255), layout_duration varchar(255), recalcstyle_duration varchar(255), script_duration varchar(255), task_duration varchar(255), screenshot varchar(255));
 SELECT * FROM stats_table;

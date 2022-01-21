@@ -5,4 +5,4 @@ function callWorker() {
   worker();
 }
 
-setInterval(callWorker, 300000);
+setInterval(callWorker, 3000);
