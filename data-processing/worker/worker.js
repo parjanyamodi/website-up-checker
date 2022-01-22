@@ -11,7 +11,15 @@ async function worker() {
     } else {
       for (let i in res) {
         var obj = res[i];
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+          executablePath: "/usr/bin/chromium-browser",
+          args: [
+            "--disable-gpu",
+            "--disable-setuid-sandbox",
+            "--no-sandbox",
+            "--no-zygote",
+          ],
+        });
         const time = new Date();
         try {
           const page = await browser.newPage();
