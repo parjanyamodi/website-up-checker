@@ -27,6 +27,7 @@ async function worker() {
 }
 
 function sendMail(user_id, error) {
+  /*
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -57,6 +58,7 @@ function sendMail(user_id, error) {
       }
     }
   );
+  */
 }
 
 module.exports = worker;
