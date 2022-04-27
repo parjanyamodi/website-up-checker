@@ -1,18 +1,18 @@
 CREATE DATABASE `website-up-checker`;
 USE `website-up-checker`; 
-CREATE TABLE login_table (user_id varchar(30) NOT NULL, email varchar(255) NOT NULL, pass varchar(255) NOT NULL, UNIQUE (user_id, email));
+CREATE TABLE login_table (user_id varchar(30) NOT NULL, name varchar(255) NOT NULL, email varchar(255) NOT NULL, UNIQUE (user_id, email), PRIMARY KEY (user_id));
 SELECT * FROM login_table;
 drop table login_table;
 
-SELECT email from login_table WHERE email = 'parjanyamodi@gmail.cm';
+SELECT * from login_table WHERE email = 'parjanyamodi@gmail.com';
 
 
 drop table stats_table;
-CREATE TABLE stats_table (user_id varchar(30), url_id varchar(255), time_stamp varchar(255), status_code varchar(255), layout_duration varchar(255), recalcstyle_duration varchar(255), script_duration varchar(255), task_duration varchar(255), screenshot varchar(255));
+CREATE TABLE stats_table (user_id varchar(30), url_id varchar(255), time_stamp varchar(255), status_code varchar(255), layout_duration varchar(255), recalcstyle_duration varchar(255), script_duration varchar(255), task_duration varchar(255), FOREIGN KEY (user_id) REFERENCES login_table(user_id) ON DELETE CASCADE,FOREIGN KEY (url_id) REFERENCES url_table(url_id) ON DELETE CASCADE);
 SELECT * FROM stats_table;
 
 drop table url_table;
-CREATE TABLE url_table (user_id varchar(30), url varchar(255), url_id varchar(255));
+CREATE TABLE url_table (user_id varchar(30), url varchar(255), url_id varchar(255),PRIMARY KEY (url_id),FOREIGN KEY (user_id) REFERENCES login_table(user_id) ON DELETE CASCADE);
 SELECT * FROM url_table;
 
 insert into login_table values("fdedgf345345633423", "parjanyamodi@gmail.com", "admin", 1, 3456);
